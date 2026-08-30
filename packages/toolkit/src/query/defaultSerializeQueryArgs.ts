@@ -27,7 +27,7 @@ export const defaultSerializeQueryArgs: SerializeQueryArgs<any> = ({
             .reduce<any>((acc, key) => {
               acc[key] = (value as any)[key]
               return acc
-            }, {})
+            }, Object.create(null))
         : value
       return value
     })

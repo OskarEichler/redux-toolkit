@@ -55,6 +55,23 @@ test('nested object arg is sorted recursively', () => {
   )
 })
 
+test('serializes an own __proto__ property', () => {
+  const first = defaultSerializeQueryArgs({
+    endpointDefinition,
+    endpointName,
+    queryArgs: { ['__proto__']: 'first' },
+  })
+  const second = defaultSerializeQueryArgs({
+    endpointDefinition,
+    endpointName,
+    queryArgs: { ['__proto__']: 'second' },
+  })
+
+  expect(first).toBe('test({"__proto__":"first"})')
+  expect(second).toBe('test({"__proto__":"second"})')
+  expect(first).not.toBe(second)
+})
+
 test('Fully serializes a deeply nested object', () => {
   const nestedObj = {
     a: {

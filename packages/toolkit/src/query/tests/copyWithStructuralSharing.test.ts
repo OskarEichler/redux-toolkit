@@ -38,6 +38,19 @@ test('equal object from JSON Object', () => {
   expect(newCopy.a.b).toStrictEqual(objB.a.b)
 })
 
+test('preserves an own __proto__ data property', () => {
+  const stable = { value: 'stable' }
+  const oldObj = { ['__proto__']: { value: 'old' }, stable }
+  const newObj = { ['__proto__']: { value: 'new' }, stable: { ...stable } }
+
+  const newCopy = copyWithStructuralSharing(oldObj, newObj)
+
+  expect(Object.getPrototypeOf(newCopy)).toBe(Object.prototype)
+  expect(Object.prototype.hasOwnProperty.call(newCopy, '__proto__')).toBe(true)
+  expect(newCopy.__proto__).toEqual({ value: 'new' })
+  expect(newCopy.stable).toBe(stable)
+})
+
 test('equal object from JSON Array', () => {
   const json = JSON.stringify([
     1,
